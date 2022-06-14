@@ -9,7 +9,7 @@ class Cart(models.Model):
                                 verbose_name='Продукт')
     order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='order_product', blank=True, null=True,
                               verbose_name='Заказы')
-    price = models.PositiveIntegerField(default=0, verbose_name='Цена')
+    price = models.PositiveIntegerField(default=0, blank=True, verbose_name='Цена')
     stock = models.PositiveIntegerField(null=True, blank=True, verbose_name="Количество в линейке")
     image = models.ForeignKey(ProductItemImage, on_delete=models.CASCADE, null=True, blank=True, verbose_name='Картинка товара')
 
