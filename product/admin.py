@@ -31,10 +31,10 @@ class ProductAdmin(admin.ModelAdmin):
 
 
 @admin.register(AboutUs)
-class ProductAdmin(admin.ModelAdmin):
+class AboutUsAdmin(admin.ModelAdmin):
 
     def has_add_permission(self, request):
-        if self.model.objects.count() >=1:
+        if self.model.objects.count() >= 1:
             return False
         return super().has_add_permission(request)
 

@@ -41,7 +41,7 @@ class ProductRandomView(APIView):
             return Response(serializer.data)
 
 
-class SimilarProductAPIViewSet(ModelViewSet):
+class SimilarProductView(generics.ListAPIView):
     queryset = Product.objects.all()
     serializer_class = SimilarSerializer
 
@@ -108,7 +108,7 @@ class ListProductAPIView(APIView):
         return Response(serializer(movie, many=True).data)
 
 
-class NoveltiesListAPIViewSet(ModelViewSet):
+class NoveltiesView(generics.ListAPIView):
     queryset = Product.objects.filter(id=True)
     serializer_class = NoveltiesListSerializer
 
@@ -140,7 +140,7 @@ class BestsellerAPIViewsPagination(PageNumberPagination):
     max_page_size = 10000
 
 
-class BestsellerAPIViewSet(viewsets.ModelViewSet):
+class BestsellerView(generics.ListAPIView):
     queryset = Product.objects.filter(bestseller=True)[0:8]
     serializer_class = NoveltiesListSerializer
     pagination_class = BestsellerAPIViewsPagination

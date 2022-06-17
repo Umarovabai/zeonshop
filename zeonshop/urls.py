@@ -41,7 +41,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/v1/docs/', schema_view.with_ui('swagger')),
     path('api/v1/', include('product.urls')),
-    path('api/v2/', include('order.urls')),
-    path('api/v3/', include('cart.urls')),
+    path('api/v2/', include('basket.urls')),
     path('ckeditor/', include('ckeditor_uploader.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from product.models import Product, Category, ProductItemImage, AboutUs, Help, OurAdvantages, \
-    PublicOffer, ProductItem, Help_image, News, Slider, Footer, FloatingButton, Contacts
+    PublicOffer, Help_image, News, Slider, Footer, FloatingButton, Contacts
 
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -10,16 +10,10 @@ class CategorySerializer(serializers.ModelSerializer):
         fields = ('id', 'name', 'image')
 
 
-class ProductItemSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = ProductItem
-        fields = ('size_range', 'quantity_in_line')
-
-
 class ProductItemImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProductItemImage
-        fields = ('image', 'rgbcolor')
+        fields = ('image', 'rgb_color')
 
 
 class ProductSerializer(serializers.ModelSerializer):
@@ -28,7 +22,7 @@ class ProductSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Product
-        fields = ('category', 'name', 'artikul', 'price', 'old_price', 'discount',
+        fields = ('id', 'category', 'name', 'artikul', 'price', 'old_price', 'discount',
                   'description', 'composition', 'stock', 'material', 'product_item_image')
 
 

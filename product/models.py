@@ -28,7 +28,7 @@ class Product(models.Model):
     artikul = models.CharField(max_length=200, verbose_name='Артикул')
     price = models.IntegerField(default=True, null=True, blank=True, verbose_name='Цена')
     old_price = models.IntegerField(default=True, verbose_name='Старая цена')
-    discount = models.PositiveIntegerField(blank=True, null=True, default=0, verbose_name='Скидки')
+    discount = models.PositiveIntegerField(null=True, default=0, verbose_name='Скидки')
     description = RichTextField(verbose_name='Описание')
     size_range = models.CharField(max_length=100, verbose_name='Размерный ряд')
     composition = models.CharField(max_length=100, verbose_name='Состав ткани')
@@ -66,7 +66,7 @@ def validate_even(value):
 class ProductItemImage(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='product_item_image')
     image = models.ImageField(upload_to='products', null=True, blank=True, validators=[validate_even])
-    rgbcolor = ColorField(verbose_name='Выбор цветов')
+    rgb_color = ColorField(verbose_name='Выбор цветов')
 
     class Meta:
         verbose_name_plural = 'Картинка продукта'
