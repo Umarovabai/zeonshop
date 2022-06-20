@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
-from product.models import Product, Category, ProductItemImage, About_us, Help, OurAdvantages, \
-    PublicOffer, ProductItem, Help_image, News, Slider, Footer, FloatingButton
+from product.models import Product, Category, ProductItemImage, AboutUs, Help, OurAdvantages, \
+    PublicOffer, Help_image, News, Slider, Footer, FloatingButton, Contacts
 
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -10,16 +10,10 @@ class CategorySerializer(serializers.ModelSerializer):
         fields = ('id', 'name', 'image')
 
 
-class ProductItemSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = ProductItem
-        fields = ('size_range', 'quantity_in_line')
-
-
 class ProductItemImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProductItemImage
-        fields = ('image', 'rgbcolor')
+        fields = ('image', 'rgb_color')
 
 
 class ProductSerializer(serializers.ModelSerializer):
@@ -28,7 +22,7 @@ class ProductSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Product
-        fields = ('category', 'name', 'artikul', 'price', 'old_price', 'discount',
+        fields = ('id', 'category', 'name', 'artikul', 'price', 'old_price', 'discount',
                   'description', 'composition', 'stock', 'material', 'product_item_image')
 
 
@@ -42,14 +36,14 @@ class SimilarSerializer(serializers.ModelSerializer):
 
 class AboutUsSerializer(serializers.ModelSerializer):
     class Meta:
-        model = About_us
+        model = AboutUs
         fields = '__all__'
 
 
 class HelpSerializer(serializers.ModelSerializer):
     class Meta:
         model = Help
-        fields = ['question', 'answer', 'image']
+        fields = ['question', 'answer']
 
 
 class Help_imageSerializer(serializers.ModelSerializer):
@@ -96,16 +90,20 @@ class SliderSerializers(serializers.ModelSerializer):
         model = Slider
         fields = ('link', 'image')
 
-
-class FooterSerializer(serializers.ModelSerializer):
+class FooterSerializers(serializers.ModelSerializer):
     class Meta:
         model = Footer
-        fields = ('info', 'header_image', 'footer_Image',
-                  'header_number', 'instagram', 'mail',
+        fields = '__all__'
+
+
+class ContactsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Contacts
+        fields = ('instagram', 'mail',
                   'whatsapp', 'num', 'telegram')
 
 
-class FloatingButtonSerlializer(serializers.ModelSerializer):
+class FloatingButtonSerializer(serializers.ModelSerializer):
     class Meta:
         model = FloatingButton
         fields = ('whatsapp', 'telegram')

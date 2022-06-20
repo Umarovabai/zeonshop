@@ -2,6 +2,7 @@ from ckeditor.fields import RichTextField
 from django.core.exceptions import ValidationError
 from django.db import models
 from colorfield.fields import ColorField
+from solo.models import SingletonModel
 
 STATUS_CALLED = [
     ('YES', 'Да'),
@@ -27,7 +28,7 @@ class Product(models.Model):
     artikul = models.CharField(max_length=200, verbose_name='Артикул')
     price = models.IntegerField(default=True, null=True, blank=True, verbose_name='Цена')
     old_price = models.IntegerField(default=True, verbose_name='Старая цена')
-    discount = models.PositiveIntegerField(blank=True, null=True, default=0, verbose_name='Скидки')
+    discount = models.PositiveIntegerField(null=True, default=0, verbose_name='Скидки')
     description = RichTextField(verbose_name='Описание')
     size_range = models.CharField(max_length=100, verbose_name='Размерный ряд')
     composition = models.CharField(max_length=100, verbose_name='Состав ткани')
@@ -65,16 +66,18 @@ def validate_even(value):
 class ProductItemImage(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='product_item_image')
     image = models.ImageField(upload_to='products', null=True, blank=True, validators=[validate_even])
-    rgbcolor = ColorField(verbose_name='Выбор цветов')
+    rgb_color = ColorField(verbose_name='Выбор цветов')
 
     class Meta:
         verbose_name_plural = 'Картинка продукта'
 
 
-class About_us(models.Model):
+class AboutUs(models.Model):
     title = models.CharField(max_length=250, verbose_name='Заголовок')
     description = RichTextField(blank=True, verbose_name='Описание')
-    image = models.ImageField(upload_to='products', blank=True, verbose_name='Картинки')
+    image = models.ImageField(upload_to='products', verbose_name='Картинка')
+    image2 = models.ImageField(upload_to='products', verbose_name='Картинка')
+    image3 = models.ImageField(upload_to='products', verbose_name='Картинка')
 
     class Meta:
         verbose_name_plural = 'О нас'
@@ -85,12 +88,9 @@ class About_us(models.Model):
 
 
 
-
 class Help(models.Model):
     question = models.TextField(max_length=200, db_index=True, verbose_name='Вопросы')
     answer = models.TextField(max_length=200, db_index=True, verbose_name='Ответы')
-    image = models.ImageField(upload_to='products', verbose_name='Картинки')
-
     class Meta:
         verbose_name_plural = 'Помощь'
 
@@ -98,16 +98,11 @@ class Help(models.Model):
         return self.question
 
 
-class Help_image(models.Model):
+class Help_image(SingletonModel):
     image_help = models.ImageField(upload_to='products', blank=True, verbose_name='Картинки')
 
-    def clean(self):
-        Help.append(len(Help_image.objects.filter(image_help=self.pk)))
-        dd = len(Help_image)
-        print(len(Help_image))
-        if dd >= 2:
-            Help.clear()
-            raise ValidationError('Не больше 1 Фотографий')
+    class Meta:
+        verbose_name_plural = 'Картинка для помощи'
 
 
 class OurAdvantages(models.Model):
@@ -152,12 +147,20 @@ class Slider(models.Model):
     class Meta:
         verbose_name_plural = 'Слайдер'
 
-
 class Footer(models.Model):
     info = models.TextField(max_length=200, verbose_name='Информация')
     header_image = models.ImageField(upload_to='products', null=True, blank=True, verbose_name='Логотип Футера')
     footer_Image = models.ImageField(upload_to='products', blank=True, null=True, verbose_name='Логотип Хедера')
     header_number = models.CharField(max_length=30, null=True, blank=True, verbose_name='Номер в хедере')
+
+    def __str__(self):
+        return self.info
+
+    class Meta:
+        verbose_name_plural = 'Футер и хедер'
+
+
+class Contacts(models.Model):
     number = models.CharField(max_length=30, blank=True, verbose_name='Ввод данных')
     instagram = models.CharField(max_length=100, null=True, blank=True, verbose_name='Инстаграм')
     whatsapp = models.CharField(max_length=30, null=True, blank=True, verbose_name='Ватсапп')
@@ -171,10 +174,10 @@ class Footer(models.Model):
         self.instagram = 'https://www.instagram.com/'
         self.mail = 'https://mail.doodle.com/'
         self.number = '+996{self.number}'
-        super(Footer, self).save(*args, **kwargs)
+        super(Contacts, self).save(*args, **kwargs)
 
     class Meta:
-        verbose_name_plural = 'Футер и Хедер'
+        verbose_name_plural = 'Контакты'
 
 
 class FloatingButton(models.Model):

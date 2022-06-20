@@ -21,10 +21,10 @@ from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
 from rest_framework.routers import DefaultRouter
 
-from product.views import ProductViewSet
+from product.views import ProductListView
 
 router = DefaultRouter()
-router.register('product', ProductViewSet),
+router.register('product', ProductListView),
 
 
 
@@ -41,7 +41,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/v1/docs/', schema_view.with_ui('swagger')),
     path('api/v1/', include('product.urls')),
-    path('api/v2/', include('order.urls')),
-    path('api/v2/', include('cart.urls')),
+    path('api/v2/', include('basket.urls')),
     path('ckeditor/', include('ckeditor_uploader.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
