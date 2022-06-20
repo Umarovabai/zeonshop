@@ -51,8 +51,7 @@ INSTALLED_APPS = [
 
     #myApp
     'product',
-    'order',
-    'cart',
+    'basket',
 
 ]
 
@@ -149,7 +148,7 @@ STATIC_URL = '/static/'
 STATIC_DIR = os.path.join(BASE_DIR, 'static')
 STATICFILES_DIRS = [STATIC_DIR]
 # STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-CART_SESSION_ID = 'cart'
+CART_SESSION_ID = 'basket'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 

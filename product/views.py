@@ -10,15 +10,15 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 
-from product.models import Product, Category, About_us, Help, OurAdvantages, PublicOffer, News, Slider, \
-    Footer, FloatingButton
+from product.models import Product, Category, AboutUs, Help, OurAdvantages, PublicOffer, News, Slider, \
+    Footer, FloatingButton, Contacts
 
 from product.serializers import ProductSerializer, SimilarSerializer, CategorySerializer, AboutUsSerializer, \
     HelpSerializer, OurAdvantagesSerializer, PublicOfferSerializer, NewsSerializer, ListProductSerializer, \
-    NoveltiesListSerializer, SliderSerializers, FooterSerializer, FloatingButtonSerlializer
+    NoveltiesListSerializer, SliderSerializers, ContactsSerializer, FooterSerializers, FloatingButtonSerializer
 
 
-class ProductViewSet(ModelViewSet):
+class ProductListView(ListAPIView):
     serializer_class = ProductSerializer
     queryset = Product.objects.all().order_by('-id')
     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
@@ -41,7 +41,7 @@ class ProductRandomView(APIView):
             return Response(serializer.data)
 
 
-class SimilarProductAPIViewSet(ModelViewSet):
+class SimilarProductView(generics.ListAPIView):
     queryset = Product.objects.all()
     serializer_class = SimilarSerializer
 
@@ -57,34 +57,34 @@ class CategoryAPIViewsPagination(PageNumberPagination):
     max_page_size = 100
 
 
-class CategoryListAPIViewSet(ModelViewSet):
+class CategoryListView(ListAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
     pagination_class = CategoryAPIViewsPagination
     permission_classes = [IsAuthenticatedOrReadOnly, ]
 
 
-class AboutUsAPIViewSet(ModelViewSet):
-    queryset = About_us.objects.all()
+class AboutUsView(generics.ListAPIView):
+    queryset = AboutUs.objects.all()
     serializer_class = AboutUsSerializer
 
 
-class HelpAPIViewSet(ModelViewSet):
+class HelpView(generics.ListAPIView):
     queryset = Help.objects.all()
     serializer_class = HelpSerializer
 
 
-class OurAdvantagesAPIViewSet(viewsets.ModelViewSet):
+class OurAdvantagesView(generics.ListAPIView):
     queryset = OurAdvantages.objects.all()[0:4]
     serializer_class = OurAdvantagesSerializer
 
 
-class PublicOfferAPIViewSet(ModelViewSet):
+class PublicOfferView(generics.ListAPIView):
     queryset = PublicOffer.objects.all()
     serializer_class = PublicOfferSerializer
 
 
-class NewsViewSet(ModelViewSet):
+class NewsView(generics.ListAPIView):
     queryset = News.objects.all()
     serializer_class = NewsSerializer
 
@@ -108,7 +108,7 @@ class ListProductAPIView(APIView):
         return Response(serializer(movie, many=True).data)
 
 
-class NoveltiesListAPIViewSet(ModelViewSet):
+class NoveltiesView(generics.ListAPIView):
     queryset = Product.objects.filter(id=True)
     serializer_class = NoveltiesListSerializer
 
@@ -126,7 +126,7 @@ class MainAPIViewsPagination(PageNumberPagination):  # Новинка для г�
     max_page_size = 1000
 
 
-class MainNoveltiesAPIViewSet(viewsets.ModelViewSet):
+class MainNoveltiesView(generics.ListAPIView):
     queryset = Category.objects.filter(id=True)[0:4]
     serializer_class = NoveltiesListSerializer
     pagination_class = MainAPIViewsPagination
@@ -140,7 +140,7 @@ class BestsellerAPIViewsPagination(PageNumberPagination):
     max_page_size = 10000
 
 
-class BestsellerAPIViewSet(viewsets.ModelViewSet):
+class BestsellerView(generics.ListAPIView):
     queryset = Product.objects.filter(bestseller=True)[0:8]
     serializer_class = NoveltiesListSerializer
     pagination_class = BestsellerAPIViewsPagination
@@ -159,16 +159,20 @@ class CollectionAPIViewSet(viewsets.ModelViewSet):
 
 
 # Наши приемущества список 4шт
-class OurAdvantagesAPIViewSet(viewsets.ModelViewSet):
+class OurAdvantagesView(generics.ListAPIView):
     queryset = OurAdvantages.objects.all()[0:4]
     serializer_class = OurAdvantagesSerializer
 
 
-class FooterAPIViewSet(viewsets.ModelViewSet):
+class FooterView(generics.ListAPIView):
     queryset = Footer.objects.all()
-    serializer_class = FooterSerializer
+    serializer_class = FooterSerializers
+
+class ContactsView(generics.ListAPIView):
+    queryset = Contacts.objects.all()
+    serializer_class = ContactsSerializer
 
 
-class FloatingButtonAPIViewSet(ModelViewSet):
+class FloatingButtonView(generics.CreateAPIView):
     queryset = FloatingButton.objects.all()
-    serializer_class = FloatingButtonSerlializer
+    serializer_class = FloatingButtonSerializer
