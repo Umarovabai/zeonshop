@@ -9,7 +9,9 @@ STATUS_CALLED = [
     ('NO', 'Нет')
 ]
 
+
 class Category(models.Model):
+    """ Категории """
     name = models.CharField(max_length=100, verbose_name='Название')
     image = models.ImageField(upload_to='products', verbose_name="Картинка")
 
@@ -22,6 +24,7 @@ class Category(models.Model):
 
 
 class Product(models.Model):
+    """ Продукты """
     category = models.ForeignKey(Category, null=True, related_name='products', on_delete=models.CASCADE,
                                  verbose_name='Категории')
     name = models.CharField(max_length=150, verbose_name='Название')
@@ -64,6 +67,7 @@ def validate_even(value):
 
 
 class ProductItemImage(models.Model):
+    """ Картинка продукта """
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='product_item_image')
     image = models.ImageField(upload_to='products', null=True, blank=True, validators=[validate_even])
     rgb_color = ColorField(verbose_name='Выбор цветов')
@@ -73,6 +77,7 @@ class ProductItemImage(models.Model):
 
 
 class AboutUs(models.Model):
+    """ О нас """
     title = models.CharField(max_length=250, verbose_name='Заголовок')
     description = RichTextField(blank=True, verbose_name='Описание')
     image = models.ImageField(upload_to='products', verbose_name='Картинка')
@@ -86,11 +91,11 @@ class AboutUs(models.Model):
         return self.title
 
 
-
-
 class Help(models.Model):
+    """ Помощь """
     question = models.TextField(max_length=200, db_index=True, verbose_name='Вопросы')
     answer = models.TextField(max_length=200, db_index=True, verbose_name='Ответы')
+
     class Meta:
         verbose_name_plural = 'Помощь'
 
@@ -99,6 +104,7 @@ class Help(models.Model):
 
 
 class Help_image(SingletonModel):
+    """ Картинка помощи """
     image_help = models.ImageField(upload_to='products', blank=True, verbose_name='Картинки')
 
     class Meta:
@@ -106,6 +112,7 @@ class Help_image(SingletonModel):
 
 
 class OurAdvantages(models.Model):
+    """ Наши преимущества """
     title = models.CharField(max_length=200, verbose_name='Заголовок')
     description = models.TextField(blank=True, verbose_name='Описание')
     image = models.ImageField(upload_to='products', blank=True, verbose_name='Картинка')
@@ -118,6 +125,7 @@ class OurAdvantages(models.Model):
 
 
 class PublicOffer(models.Model):
+    """ Публичная офферта """
     name = models.CharField(max_length=300, verbose_name='Заголовок')
     description = RichTextField(null=True, verbose_name='Описание')
 
@@ -129,6 +137,7 @@ class PublicOffer(models.Model):
 
 
 class News(models.Model):
+    """ Новости """
     image_news = models.ImageField(upload_to='products', blank=True, verbose_name='Картинка')
     header = models.CharField(max_length=200, blank=True, verbose_name='Заголовок')
     description = RichTextField(blank=True, verbose_name='Описание')
@@ -141,13 +150,16 @@ class News(models.Model):
 
 
 class Slider(models.Model):
+    """ Слайдер """
     image = models.ImageField(upload_to='products', blank=True, null=True, verbose_name='Картинка')
     link = models.URLField(max_length=150, null=True, blank=True, verbose_name='Ссылка')
 
     class Meta:
         verbose_name_plural = 'Слайдер'
 
+
 class Footer(models.Model):
+    """ Футер и Хедер """
     info = models.TextField(max_length=200, verbose_name='Информация')
     header_image = models.ImageField(upload_to='products', null=True, blank=True, verbose_name='Логотип Футера')
     footer_Image = models.ImageField(upload_to='products', blank=True, null=True, verbose_name='Логотип Хедера')
@@ -161,6 +173,7 @@ class Footer(models.Model):
 
 
 class Contacts(models.Model):
+    """ Контактные данные """
     number = models.CharField(max_length=30, blank=True, verbose_name='Ввод данных')
     instagram = models.CharField(max_length=100, null=True, blank=True, verbose_name='Инстаграм')
     whatsapp = models.CharField(max_length=30, null=True, blank=True, verbose_name='Ватсапп')
@@ -181,11 +194,13 @@ class Contacts(models.Model):
 
 
 class FloatingButton(models.Model):
+    """ Обратный звонок """
     whatsapp = models.CharField(max_length=30, null=True, blank=True, editable=False, verbose_name='Ватсапп')
     telegram = models.CharField(max_length=30, null=True, blank=True, editable=False, verbose_name='Телеграм')
     name = models.CharField(max_length=30, null=True, blank=True, verbose_name='Имя')
     number = models.CharField(max_length=30, null=True, blank=True, verbose_name='Номер телефона')
-    type = models.CharField(max_length=30, choices=STATUS_CALLED, default='NO', null=True, blank=True, verbose_name='Тип обращения(обратный звонок)')
+    type = models.CharField(max_length=30, choices=STATUS_CALLED, default='NO', null=True, blank=True,
+                            verbose_name='Тип обращения(обратный звонок)')
     created = models.DateTimeField(auto_now_add=True, blank=True, verbose_name='Дата создания')
     updated = models.DateTimeField(auto_now=True, verbose_name='Дата обновления')
 

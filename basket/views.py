@@ -3,18 +3,18 @@ from rest_framework.generics import CreateAPIView
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from basket.models import Cart, OrderItem
-from basket.serializers import OrderSerializer, CartCreateSerializer, CartSerializer
+from basket.models import Cart, Order, Orders
+from basket.serializers import OrderListSerializer, CartCreateSerializer, CartListSerializer, OrderSerializer
 
 
 class CartView(generics.ListAPIView):
     queryset = Cart.objects.all()
-    serializer_class = CartSerializer
+    serializer_class = CartListSerializer
+
 
 class APICartCreateView(CreateAPIView):
     queryset = Cart.objects.all()
     serializer_class = CartCreateSerializer
-
 
     def create(self, request, *args, **kwargs):
         serializer = self.serializer_class(
@@ -25,14 +25,16 @@ class APICartCreateView(CreateAPIView):
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
+
 class APICartDeleteALLView(APIView):
 
     def delete(self, *args, **kwargs):
         Cart.objects.all().delete()
         return Response()
 
+
 class DeleteOneCartView(APIView):
-    ser_class = CartSerializer
+    ser_class = CartListSerializer
     model = Cart
 
     def post(self, request):
@@ -52,10 +54,11 @@ class DeleteOneCartView(APIView):
             return Response({'stock': 0})
         return Response({'stock': order_item.stock}, status=200)
 
-class AddOneCartView(APIView):
 
-    ser_class = CartSerializer
+class AddOneCartView(APIView):
+    ser_class = CartListSerializer
     model = Cart
+
     def post(self, request):
         serializer = self.ser_class(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -78,17 +81,33 @@ class AddOneCartView(APIView):
         return Response({'stock': order_item.stock})
 
 
+class APICartTotalView(APIView):
+    def get(self, request, *args, **kwargs):
+        before_discount = Cart.total_price_before_discount()
+        after_discount = Cart.total_price_after_discount()
+        discount = before_discount - after_discount
+        products = Cart.quantity_all_goods()
+        amount = Cart.total_number_of_line()
 
-class OrderAPIView(generics.ListCreateAPIView):
-    queryset = OrderItem.objects.all()
+        return Response({'Сумма до скидки': before_discount,
+                         'Сумма после скидки': after_discount,
+                         'Скидка': discount,
+                         'Количество всех товаров в линейке': products,
+                         'Количество всех линеек': amount})
+
+
+class OrderCreateView(CreateAPIView):
     serializer_class = OrderSerializer
+    queryset = Order.objects.all()
+
+    def perform_create(self, serializer):
+        order = serializer.save()
+        for a in Cart.objects.all():
+            Orders.objects.create(product=a.product, name=a.product.name, image=a.image, order=order)
+        self.queryset.update()
+        Cart.objects.all().delete()
 
 
-
-
-def total():
-    total = 0
-    for i in OrderItem.objects.all():
-        total += i.product.price
-        return total
-
+class OrderAPIView(generics.ListAPIView):
+    queryset = Orders.objects.all()
+    serializer_class = OrderListSerializer

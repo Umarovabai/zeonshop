@@ -1,7 +1,7 @@
 
 from rest_framework import serializers
 
-from basket.models import Cart, OrderItem
+from basket.models import Cart, Order
 from product.models import Product, ProductItemImage
 
 
@@ -25,7 +25,7 @@ class ImageCartSerializer(serializers.ModelSerializer):
         fields = ['image', 'rgb_color']
 
 
-class CartSerializer(serializers.ModelSerializer):
+class CartListSerializer(serializers.ModelSerializer):
     product = ItemCartSerializer()
     image = ImageCartSerializer()
 
@@ -35,9 +35,25 @@ class CartSerializer(serializers.ModelSerializer):
 
 
 class OrderSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Order
+        exclude = ('status',)
+        read_only_fields = ('id',
+                            'number_of_lines',
+                            'number_of_goods',
+                            'total_price_before_discount',
+                            'total_discounted_price',
+                            'discount_amount'
+                            )
+
+    def create(self, validated_data):
+        return Order.objects.create(**validated_data)
+
+
+class OrderListSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = OrderItem
+        model = Order
         fields = '__all__'
 
 

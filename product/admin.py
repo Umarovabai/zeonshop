@@ -29,7 +29,6 @@ class ProductAdmin(admin.ModelAdmin):
     ]
 
 
-
 @admin.register(AboutUs)
 class AboutUsAdmin(admin.ModelAdmin):
 
@@ -50,7 +49,6 @@ class PublicOfferAdmin(admin.ModelAdmin):
 
 @admin.register(Slider)
 class SliderAdmin(admin.ModelAdmin):
-
     def has_add_permission(self, request):
         if self.model.objects.count() >= 1:
             return False
@@ -64,6 +62,7 @@ class FooterAdmin(admin.ModelAdmin):
         if self.model.objects.count() >= 1:
             return False
         return super().has_add_permission(request)
+
 
 @admin.register(Contacts)
 class ContactsAdmin(admin.ModelAdmin):
@@ -80,8 +79,8 @@ class FloatingButtonAdmin(admin.ModelAdmin):
     list_filter = ('type', 'created')
 
 
-
 admin.site.register(Help)
+
 
 @admin.register(Help_image)
 class Help_imageAdmin(admin.ModelAdmin):
