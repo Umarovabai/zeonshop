@@ -1,9 +1,10 @@
 from ckeditor_uploader.widgets import CKEditorUploadingWidget
 from django import forms
 from django.contrib import admin
+from solo.admin import SingletonModelAdmin
 
-from product.models import Category, Product, ProductItemImage, Help, About_us, OurAdvantages, PublicOffer, News, \
-    Slider, Footer, FloatingButton
+from product.models import Category, Product, ProductItemImage, Help, AboutUs, OurAdvantages, PublicOffer, News, \
+    Slider, Footer, FloatingButton, Help_image, Contacts
 
 
 class ProductAdminForm(forms.ModelForm):
@@ -28,17 +29,17 @@ class ProductAdmin(admin.ModelAdmin):
     ]
 
 
-@admin.register(About_us)
-class ProductAdmin(admin.ModelAdmin):
+@admin.register(AboutUs)
+class AboutUsAdmin(admin.ModelAdmin):
 
     def has_add_permission(self, request):
-        if self.model.objects.count() >=1:
+        if self.model.objects.count() >= 1:
             return False
         return super().has_add_permission(request)
 
 
 @admin.register(PublicOffer)
-class ProductAdmin(admin.ModelAdmin):
+class PublicOfferAdmin(admin.ModelAdmin):
 
     def has_add_permission(self, request):
         if self.model.objects.count() >= 1:
@@ -47,8 +48,7 @@ class ProductAdmin(admin.ModelAdmin):
 
 
 @admin.register(Slider)
-class ProductAdmin(admin.ModelAdmin):
-
+class SliderAdmin(admin.ModelAdmin):
     def has_add_permission(self, request):
         if self.model.objects.count() >= 1:
             return False
@@ -56,7 +56,16 @@ class ProductAdmin(admin.ModelAdmin):
 
 
 @admin.register(Footer)
-class ProductAdmin(admin.ModelAdmin):
+class FooterAdmin(admin.ModelAdmin):
+
+    def has_add_permission(self, request):
+        if self.model.objects.count() >= 1:
+            return False
+        return super().has_add_permission(request)
+
+
+@admin.register(Contacts)
+class ContactsAdmin(admin.ModelAdmin):
 
     def has_add_permission(self, request):
         if self.model.objects.count() >= 1:
@@ -65,12 +74,23 @@ class ProductAdmin(admin.ModelAdmin):
 
 
 @admin.register(FloatingButton)
-class ProductAdmin(admin.ModelAdmin):
+class FloatingButtonAdmin(admin.ModelAdmin):
     list_display = ('name', 'number', 'type', 'created')
     list_filter = ('type', 'created')
 
 
-admin.site.register(Category)
 admin.site.register(Help)
+
+
+@admin.register(Help_image)
+class Help_imageAdmin(admin.ModelAdmin):
+
+    def has_add_permission(self, request):
+        if self.model.objects.count() >= 1:
+            return False
+        return super().has_add_permission(request)
+
+
 admin.site.register(OurAdvantages)
 admin.site.register(News)
+admin.site.register(Category)
